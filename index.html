@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Matija Pretnar</title>
+
+    <link rel="stylesheet" href="css/inuit.css">
+    <link rel="stylesheet" href="css/grid.inuit.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+</head>
+
+<body class="wrapper">
+
+    <div class="header">
+        <a href="img/matija.jpg"><img src="img/matija.png" width="250" style="float: right; margin-bottom: -50px; margin-left: 10px" alt="Matija Pretnar"/></a>
+        <h1>Matija Pretnar</h1>
+
+        <address>
+            <a href="http://www.fmf.uni-lj.si/">Fakulteta za matematiko in fiziko</a> <br />
+            Jadranska 21,
+            SI-1000 Ljubljana <br />
+            tel: +386 1 4766 551 <br />
+            <a href='mail&#116;o&#58;&#37;6Da&#116;&#37;&#54;9ja&#46;%&#55;0&#114;etna%&#55;2&#64;&#37;66mf%2&#69;uni-l%6A&#46;s&#105;'>
+                mati&#106;a&#46;pr&#101;&#116;nar&#64;fmf&#46;u&#110;&#105;-&#108;j&#46;si
+            </a> <br />
+            <a href="http://twitter.com/matijapretnar/">@matijapretnar</a>
+        </address>
+
+    </div>
+
+    <hr />
+
+    <div class="grids">
+        <div class="grid-6">
+
+            <h2>Research</h2>
+
+            <p>
+                I study formalization, implementation, and semantics of programming languages.
+                Together with
+                    <a href="http://homepages.inf.ed.ac.uk/gdp/">Gordon Plotkin</a>
+                    (who was my PhD supervisor),
+                we discovered handlers of algebraic effects.
+                Together with
+                    <a href="http://andrej.com/">Andrej Bauer</a>,
+                we are implementing them in <a href="http://math.andrej.com/eff/">Eff</a>, which is a functional programming language that treats effects the way they should be treated.
+            </p>
+
+            <p>
+                For those interested, here is a <a href="#publications">list of my publications</a>.
+            </p>
+
+        </div><!-- /grid-6 -->
+
+        <div class="grid-6">
+
+            <h2>Poučevanje</h2>
+
+            <p>
+                Zaposlen sem kot asistent,
+                vodim pa vaje iz večinoma računalniških predmetov.
+                Za lastne potrebe pri poučevanju sem razvil:
+            </p>
+
+            <ul>
+                <li>spletno aplikacijo za <a href="http://tomo.fmf.uni-lj.si">učenje programiranja</a></li>
+                <li><span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>ovski paket za <a href="#izpit">sestavljanje izpitnih pol</a> in</li>
+                <li>program v <em>Mathematici</em> za <a href="#generiranje-nalog">generiranje nalog</a> v večjih količinah.</li>
+            </ul>
+
+        </div><!-- /grid-6 -->
+
+    </div><!-- /grids -->
+
+    <hr />
+
+    <div class="grids">
+        <div class="grid-9">
+
+            <h2 id="publications">Publications</h2>
+
+            <dl>
+                <dt><a href="http://arxiv.org/abs/1306.6316">An Effect System for Algebraic Effects and Handlers</a></dt>
+                <dd>
+                    The paper presents a region-based effect system for algebraic effects and handlers.
+                </dd>
+
+                <dt><a href="http://arxiv.org/abs/1203.1539">Programming with Algebraic Effects and Handlers</a></dt>
+                <dd>
+                    The introduction of <a href="https://github.com/matijapretnar/eff">Eff</a>. The paper gives an introduction to algebraic effects and handlers geared towards programmers, the syntax and semantics of Eff, and a lot of examples.
+                </dd>
+
+                <dt><a href="http://lmcs-online.org/ojs/viewarticle.php?id=1083&layout=abstract">Handling Algebraic Effects</a></dt>
+                <dd>
+                    The journal version of Handlers of Algebraic Effects, published in <a href="http://www.lmcs-online.org/"><acronym title="Logical Methods in Computer Science">LMCS</acronym></a>.
+                </dd>
+                <dt><a href="pdf/handlers-of-algebraic-effects.pdf">Handlers of Algebraic Effects</a></dt>
+                <dd>
+                    This is the paper that introduced handlers.
+                    However, please read Handling Algebraic Effects instead, as it has been significantly cleaned up.
+                </dd>
+                <dt><a href="pdf/a-logic-for-algebraic-effects.pdf">A Logic for Algebraic Effects</a></dt>
+                <dd>
+                </dd>
+                <dt><a href="pdf/the-logic-and-handling-of-algebraic-effects.pdf">The Logic and Handling of Algebraic Effects</a></dt>
+                <dd>My PhD thesis</dd>
+                <dt><a href="pdf/sinteticna-topologija.pdf">Sintetična topologija</a></dt>
+                <dd>My BSc thesis</dd>
+            </dl>
+
+        </div><!-- /grid-12 -->
+
+    </div><!-- /grids -->
+
+    <hr />
+
+    <div class="grids">
+        <div class="grid-12">
+
+            <h2 id="izpit">Sestavljanje izpitnih pol</h2>
+
+            <p>
+                Da bi olajšal sestavljanje izpitnih pol, sem pripravil LaTeXovski paket, ki veliko večino dela postori sam.
+                Vse, kar morate podati, so podatki o izpitu (ime, datum, navodila in učilnico) ter naloge.
+            </p>
+
+            <p>
+                Paket nato avtomatsko oblikuje glavo izpita, sedežni red, polja za ime, vpisno številko in točke ter podobno.
+                Poleg tega vam omogoča, da za vsak izpit pripravite tako verzijo za reševanje na polo kot verzijo za objavo v arhivu.
+            </p>
+
+            <dl>
+                <dt><a href="latex/vzorec.pdf">vzorec.pdf</a></dt>
+                <dd>PDF z vzorčnim izpitom</dd>
+                <dt><a href="latex/vzorec-arhiv.pdf">vzorec-arhiv.pdf</a></dt>
+                <dd>PDF z istim izpitom, le pripravljenim za objavo v arhivu</dd>
+                <dt><a href="latex/izpit.zip">izpit.zip</a></dt>
+                <dd>Datoteka s paketom ter vzorčnim izpitom</dd>
+            </dl>
+
+            <p>
+                Če želite starejšo različico paketa, poglejte na <a href="https://github.com/matijapretnar/izpit">GitHub</a>.
+            </p>
+
+        </div><!-- /grid-12 -->
+    </div><!-- /grids -->
+
+    <hr>
+
+    <div class="grids">
+        <div class="grid-12">
+
+            <h2 id="generiranje-nalog">Generiranje nalog</h2>
+
+            <p>
+                Spodnji program za dani seznam študentov omogoča generiranje naključnih nalog ter njihovih rešitev. Program sprejme:
+            </p>
+            <ol>
+              <li>seznam nalog (vsaka je opisana s programom v <em>Mathematici</em>),</li>
+              <li>vzorčno datoteko (ponavadi v LaTeXu) in</li>
+              <li>seznam študentov,</li>
+            </ol>
+            <p>
+                nato pa ustvari posamezne datoteke z nalogami in skupno datoteko z rešitvami. Naloge niso čisto naključne, saj vam program za istega študenta vedno vrne enako nalogo. To vam omogoča, da naloge naknadno popravljate, ne da bi se vam pri tem v celoti spremenile.
+            </p>
+
+            <dl>
+                <dt><a href="mathematica/generiranje-nalog.zip">generiranje-nalog.zip</a></dt>
+                <dd>Datoteka s programom ter vzorcem</dd>
+            </dl>
+
+            <p>
+                Če želite starejšo različico programa, poglejte na <a href="https://github.com/matijapretnar/generiranje-nalog">GitHub</a>.
+            </p>
+
+        </div><!-- /grid-12 -->
+    </div><!-- /grids -->
+
+    <div class="footer">
+        <p>
+            &copy; Matija Pretnar
+            (Narejeno s pomočjo <a href="http://csswizardry.com/inuitcss/">inuit.css</a>)
+        </p>
+    </div>
+
+</body>
+</html>

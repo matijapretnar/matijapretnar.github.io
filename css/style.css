@@ -1,0 +1,165 @@
+@charset "UTF-8";
+/*------------------------------------*\
+	STYLE.CSS
+\*------------------------------------*/
+/*
+Author:             Harry Roberts
+Twitter:            @csswizardry
+Author URL:         csswizardry.com
+
+
+
+
+
+/*------------------------------------*\
+	CONTENTS
+\*------------------------------------*/
+/*
+LATEX
+SHARED
+MAIN
+ISLANDS
+HEADER
+TYPE
+*/
+
+
+/*------------------------------------*\
+	$LATEX
+\*------------------------------------*/
+
+/* http://edward.oconnor.cx/2007/08/tex-poshlet */
+
+.tex, .latex, .tex sub, .latex sub {
+  font-size: 1em;
+  line-height: 1em;
+}
+
+.tex sub, .latex sub, .latex sup {
+  text-transform: uppercase;
+}
+
+.latex sub, .tex sub {
+  vertical-align: -0.25em;
+  margin-left: -0.1667em;
+  margin-right: -0.125em;
+}
+
+.latex sup {
+  font-size: 0.85em;
+  vertical-align: 0.15em;
+  margin-left: -0.36em;
+  margin-right: -0.15em;
+}
+
+/*------------------------------------*\
+	$SHARED
+\*------------------------------------*/
+.island.promo,
+pre,
+code{
+	background-color:#fef8c4;
+}
+
+
+
+
+
+/*------------------------------------*\
+	$MAIN
+\*------------------------------------*/
+html{
+	font-family:Georgia, "Times New Roman", serif;
+}
+
+
+
+
+
+/*------------------------------------*\
+	$ISLANDS
+\*------------------------------------*/
+.island.promo{
+	color:#6d6841;
+	border:1px solid #d8d566;
+
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	-moz-box-shadow:0 1px 0 rgba(255,255,255,0.5) inset;
+	-webkit-box-shadow:0 1px 0 rgba(255,255,255,0.5) inset;
+	box-shadow:0 1px 0 rgba(255,255,255,0.5) inset;
+}
+	.island.promo a{
+		color:inherit;
+		font-weight:bold;
+		text-decoration:underline;
+	}
+
+
+
+
+
+/*------------------------------------*\
+	$HEADER
+\*------------------------------------*/
+.header{
+	padding:1.5em 0;
+}
+.logo{
+	background:url(../img/logo.jpg);
+}
+.logo,.logo img{
+	width:280px;
+	height:130px;
+}
+
+
+
+
+
+/*------------------------------------*\
+	$FOOTER
+\*------------------------------------*/
+.footer{
+	padding-top:1.5em;
+	border-top:1px solid #ccc;
+	color:#999;
+}
+
+
+
+
+
+/*------------------------------------*\
+	$TYPE
+\*------------------------------------*/
+a{
+	color:#4a8ec2;
+}
+mark{
+	border-bottom:2px solid;
+}
+pre{
+	padding:10px;
+}
+pre code,
+pre mark{
+	background:none;
+}
+
+
+
+
+
+/*------------------------------------*\
+	$MISC
+\*------------------------------------*/
+::selection		{ background-color:#4a8ec2; color:#fff; }
+::-moz-selection{ background-color:#4a8ec2; color:#fff; }
+hr{
+	padding:0;
+	border:none;
+	height:1px;
+	background-color:#ccc;
+}
