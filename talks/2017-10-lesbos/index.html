@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Introduction to algebraic effects and handlers</title>
+    <meta charset="utf-8">
+    <style>
+    body {
+        font-family: 'Avenir Next';
+    }
+
+    h3 {
+        font-weight: normal;
+    }
+
+    h4 {
+        font-weight: normal;
+        font-size: 1.2em;
+    }
+
+    .remark-code,
+    .remark-inline-code,
+    pre {
+        font-family: 'Iosevka';
+    }
+
+    .huge-code pre {
+      font-size: 1.8em;
+    }
+
+    .remark-code {
+        font-size: 0.95em;
+    }
+
+    .mini {
+      font-size: 0.7em;
+    }
+
+    ol,
+    ul {
+        font-size: 1.5em;
+    }
+
+    a.reveal {
+        font-weight: bold;
+    }
+
+    a.reveal:hover {
+        cursor: pointer;
+    }
+
+    .question {
+        color: white;
+        background-color: black;
+    }
+
+    .red {
+        color: red;
+    }
+
+    .green {
+        color: green;
+    }
+
+    .full_height {
+        height: 30%;
+    }
+
+    .full_height img {
+        height: 30%;
+    }
+
+    .full_width img {
+      width: 114%;
+      margin-left: -7%;
+    }
+    .fr {
+      float: right;
+      height: 0;
+      z-index: -10;
+      /*top: -20px;*/
+      margin-top: -50px;
+    }
+    .frb {
+      float: right;
+      height: 0;
+      z-index: 10;
+      /*top: -20px;*/
+      margin-top: -50px;
+      display: none;
+    }
+    .term pre {
+      background: #222;
+      color: #0e0;
+      padding: 0.5em;
+      border-radius: 8px;
+      /*border: solid 20pt black;*/
+      /*position: absolute;*/
+    }
+    </style>
+</head>
+
+<body>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<textarea id="source">
+
+
+class: center, middle
+
+# Explicit effects<br>subtyping
+
+### IFIP WG 2.1, Lesbos
+
+---
+
+class: center, middle
+
+# Introduction to algebraic effect handlers
+
+### IFIP WG 2.1, Lesbos
+
+---
+
+background-image: url(tutorial-paper-title.pdf)
+background-size: auto 90%
+
+---
+
+class: center
+
+### [Plotkin &amp; Power, 2001]:
+
+## effectful behaviour
+
+### arises from
+
+## operations
+
+### that satisfy certain
+
+## equations
+
+---
+
+class: center
+
+### [most* people, today]:
+
+## effectful behaviour
+
+### arises from
+
+## operations
+
+---
+
+class: center, middle
+
+## state
+
+### `get : unit -> int`<br>`set : int -> unit`
+
+## interactive IO
+
+### `read : unit -> string`<br>`print : string -> unit`
+
+## probabilistic nondeterminism
+
+### `toss : float -> bool`
+
+---
+
+class: center, middle
+
+## every computation
+
+### either
+
+## calls an operation .fr[![](op.png)]
+
+### or
+
+## returns a value .fr[![](val.png)]
+
+<small><small>or diverges</small></small>
+
+---
+
+### Free algebra representation
+
+<pre style="top: 0; right: 20px; position: absolute; font-size: 1.4em">
+<span style="color: red">print "A"</span>;
+let n = <span style="color: green">get ()</span> in
+if n < 0 then
+  <span style="color: blue">print "B"</span>;
+  <span style="color: blue">−(n ** 2)</span>
+else 
+  <span style="color: orange">n + 1</span>
+</pre>
+
+
+.full_width[![](tree.pdf)]
+
+---
+
+class: center, middle
+
+## exceptions
+
+### `raise : string -> empty`<br>`handle : ??? -> ???`
+
+---
+
+class: center, middle
+
+### [Plotkin &amp; Pretnar, 2009]:
+
+## exception handlers
+
+### are a special instance of
+
+## algebraic effect handlers
+
+### which turn out to be
+
+## algebra homomorphisms
+
+---
+
+class: huge-code
+
+```python
+print "Hello!";
+raise "Boom!";
+1001
+```
+
+.term[```
+Hello!
+Uncaught exception Boom!
+```]
+
+---
+
+class: huge-code
+
+```python
+handle
+  print "Hello!";
+  raise "Boom!";
+  1001
+with
+  raise msg -> 10
+```
+
+.term[```
+Hello!
+- 10 : int
+```]
+
+---
+
+class: huge-code
+
+```python
+handle
+  print "Hello!";
+  raise "Boom!";
+  1001
+with
+  raise msg -> 10
+  print msg -> 100
+```
+
+.term[```
+- 100 : int
+```]
+
+---
+
+class: huge-code
+
+```python
+handle
+  print "Hello!";
+  raise "Boom!";
+  1001
+with
+  raise msg -> 10
+  print msg k -> (2 * k ())
+```
+
+.term[```
+- 20 : int
+```]
+
+---
+
+class: huge-code
+
+```python
+handle
+  print "Hello!";
+  raise "Boom!";
+  1001
+with
+  raise msg _ -> 10
+  print msg k -> (2 * k ())
+```
+
+.term[```
+- 20 : int
+```]
+
+---
+
+class: huge-code
+
+```python
+handle
+  print "Hello!";
+  print "Boom!";
+  1001
+with
+  raise msg _ -> 10
+  print msg k -> (2 * k ())
+```
+
+.term[```
+- 4004 : int
+```]
+
+---
+
+class: huge-code
+
+```python
+handle
+  print "Hello!";
+  print "Boom!";
+  1001
+with
+  raise msg _ -> 10
+  print msg k -> (2 * k ())
+  val x -> (x - 1)
+```
+
+.term[```
+- 4000 : int
+```]
+
+---
+
+class: huge-code
+
+```python
+let abc () =
+  print "A";
+  print "B";
+  print "C"
+```
+
+.term[```
+> abc ()
+ABC
+- () : unit
+```]
+
+---
+
+class: huge-code
+
+```python
+let repeat = handler
+  print msg k ->
+    print msg; print msg; k ()
+```
+
+.term[```
+> with repeat handle (abc ())
+AABBCC
+- () : unit
+```]
+
+---
+
+class: huge-code
+
+```python
+let reverse = handler
+  print msg k ->
+    k (); print msg
+```
+
+.term[```
+> with reverse handle (abc ())
+CBA
+- () : unit
+```]
+
+---
+
+class: huge-code
+
+```python
+let mirror = handler
+  print msg k ->
+    print msg; k (); print msg
+```
+
+.term[```
+> with mirror handle (abc ())
+ABCCBA
+- () : unit
+```]
+
+---
+
+class: huge-code
+
+```python
+let resonate = handler
+  print msg k ->
+    print msg; k (); k ()
+```
+
+.term[```
+> with resonate handle (abc ())
+ABBCCCC
+- () : unit
+```]
+
+---
+
+class: huge-code
+
+```python
+let count = handler
+  print _ k -> (1 + k ())
+  val x -> 0
+```
+
+.term[```
+> with count handle (abc ())
+- 3 : int
+> with count handle
+    with mirror handle (abc ())
+- 6 : int
+> with mirror handle
+    with count handle (abc ())
+- 3 : int
+```]
+
+---
+
+class: huge-code
+
+```python
+let acc_count = handler
+  print _ k -> (fun s -> k () (s + 1))
+  val x -> (fun s -> s)
+```
+
+.term[```
+> with acc_count handle (abc ())
+- <fun> : int -> int
+> (with acc_count handle (abc ())) 0
+- 3 : int
+```]
+
+### Same trick is used to simulate state
+
+---
+
+class: huge-code
+
+```python
+let collect = handler
+  print msg k -> (msg :: k ())
+  val x -> []
+
+let silence = handler
+  print msg k -> k ()
+```
+
+.term[```
+> with collect handle (abc ())
+- ["A", "B", "C"] : string list
+> with silence handle (abc ())
+- () : unit
+```]
+
+### These two are actually useful!
+
+---
+
+class: center, middle
+
+## Handling user defined effects
+
+---
+
+class: center, middle
+
+## nondeterminism
+
+### `decide : unit -> bool`<br>`fail : unit -> empty`
+
+---
+
+class: center, middle
+
+## Finding all Pythagorean triples
+
+## $$m \leq a < b \leq n$$
+## $$a^2 + b^2 = c^2$$
+
+---
+
+class: huge-code
+
+### Choose an integer between $m$ and $n$
+
+```python
+let choose_int m n =
+  if m > n then
+    fail ()
+  else if decide () then
+    m
+  else
+    choose_int (m + 1) n
+```
+
+---
+
+class: huge-code
+
+### Choose a triple such that $m \leq a < b \leq n$
+
+```python
+let pythagorean m n =
+  let a = choose_int m (n – 1) in
+  let b = choose_int (a + 1) n in
+  match square_root (a ** 2 + b ** 2) with
+  | None -> fail ()
+  | Some c -> (a, b, c)
+```
+
+--
+
+.term[```
+> pythagorean 3 10
+Uncaught operation decide
+```]
+
+---
+
+class: huge-code
+
+
+```python
+let backtrack = handler
+  decide () k ->
+    handle (k true) with
+      fail _ _ -> k false
+```
+
+.term[```
+> with backtrack handle (pythagorean 3 4)
+- (3, 4, 5)
+
+> with backtrack handle (pythagorean 5 15)
+- (5, 12, 13)
+
+> with backtrack handle (pythagorean 5 7)
+Uncaught operation fail!
+```]
+
+---
+
+class: huge-code
+
+```python
+let trackback = handler
+  decide () k ->
+    handle (k false) with
+      fail _ _ -> k true
+```
+
+.term[```
+> with trackback handle (pythagorean 3 4)
+- (3, 4, 5)
+
+> with trackback handle (pythagorean 5 15)
+- (9, 12, 15)
+
+> with trackback handle (pythagorean 5 7)
+Uncaught operation fail!
+```]
+
+---
+
+class: huge-code
+
+```python
+let find_all = handler
+  x -> [x]
+  fail _ _ -> []
+  decide () k -> k true ++ k false
+```
+
+.term[```
+> with find_all handle (pythagorean 3 4)
+- [(3, 4, 5)]
+
+> with find_all handle (pythagorean 5 15)
+- [(5, 12, 13); (6, 8, 10); ...]
+
+> with find_all handle (pythagorean 5 7)
+- []
+```]
+
+---
+
+class: center, middle
+
+## And now for some theory!
+
+---
+
+### Terms
+
+$
+  \newcommand{\unitTy}{\type{unit}}%
+  \newcommand{\Op}{\mathtt{Op}}%
+  \newcommand{\doin}[3]{\mathbf{do} \; #1 \leftarrow #2 \; \mathbf{in} \; #3}%
+  \newcommand{\tmUnit}{\mathtt{()}}%
+  \newcommand{\set}[1]{\\{ #1 \\}}%
+  \newcommand{\coercion}{\gamma}%
+  \newcommand{\cast}[2]{#1 \vartriangleright #2}%
+  \newcommand{\T}{\;:\;}%
+  \newcommand{\inferrule}[2]{\displaystyle{\frac{#1}{#2}}}%
+  \newcommand{\and}{\quad}%
+  \newcommand{\type}[1]{\mathtt{#1}}%
+  \newcommand{\intTy}{\type{int}}%
+\newcommand{\kord}[1]{\mathbf{#1}}%
+\newcommand{\kop}[1]{\;\mathbf{#1}\;}%
+\newcommand{\kpre}[1]{\mathbf{#1}\;}%
+\newcommand{\const}[1][k]{\mathsf{#1}}%
+\newcommand{\type}[1]{\mathsf{#1}}%
+\newcommand{\op}[1][Op]{\mathsf{#1}}%
+\newcommand{\bnfis}{\mathrel{\;{:}{:}\\!=}\;}%
+\newcommand{\bnfor}{\mathrel{\;\big|\;}}%
+\newcommand{\seq}[2]{\kpre{do} #1 \leftarrow #2 \kop{in}}%
+\newcommand{\conditional}[3]{\kpre{if} #1 \kop{then} #2 \kop{else} #3}%
+\newcommand{\fls}{\kord{false}}%
+\newcommand{\fun}[1]{\kpre{fun} #1 \mapsto}%
+\newcommand{\recfun}[2]{\kpre{rec} \kpre{fun} #1 \, #2 \mapsto}%
+\newcommand{\handler}{\kpre{handler}}%
+\newcommand{\opgen}[1][\op]{#1}%
+\newcommand{\opcall}[4][\op]{#1(#2; #3.\,#4)}%
+\newcommand{\opclause}[3][\op]{#1(#2; #3) \mapsto}%
+\newcommand{\return}{\kpre{return}}%
+\newcommand{\tru}{\kord{true}}%
+\newcommand{\retclause}[1]{\return #1 \mapsto}%
+\newcommand{\withhandle}[2]{\kpre{with} #1 \kop{handle} #2}%
+\newcommand{\boolty}{\type{bool}}%
+\newcommand{\C}{\underline{C}}%
+\newcommand{\D}{\underline{D}}%
+\newcommand{\Dirt}{\Delta}%
+\newcommand{\hto}{\Rightarrow}%
+\newcommand{\opto}{\to}%
+\newcommand{\E}{\mathop{!}}%
+\newcommand{\ctx}{\Gamma}%
+\newcommand{\ent}{\vdash}%
+\newcommand{\sig}{\Sigma}%
+\newcommand{\T}{\mathrel{:}}%
+\newcommand{\step}{\leadsto}%
+\newcommand{\cond}[1]{\quad(#1)}%
+\newcommand{\T}{\;:\;}%
+\newcommand{\inferrule}[2]{\displaystyle{\frac{\vphantom{\mid}#1}{\vphantom{\mid}#2}}}%
+\newcommand{\and}{\quad}%
+\newcommand{\type}[1]{\mathtt{#1}}%
+\newcommand{\intTy}{\type{int}}%
+\newcommand{\cnstrs}{\mathcal{C}}%
+$
+ <h4>$$ 
+  \begin{aligned}
+    v &\bnfis x \bnfor k \bnfor \fun{x} c \bnfor h \\\\
+    h &\bnfis \handler \\{ \retclause{x} c_r, \opclause[\op_1]{x}{k} c_1, \dots, \opclause[\op_n]{x}{k} c_n \\} \\\\
+    c &\bnfis \return v \bnfor \opcall{v}{y}{c} \bnfor \seq{x}{c_1} c_2 \bnfor \\\\
+      &\qquad\qquad \conditional{v}{c_1}{c_2} \bnfor v_1 \, v_2 \bnfor \withhandle{v}{c} \\\\
+  \end{aligned}
+  $$</h4>
+
+--
+
+- - -
+
+<h4 class="center">
+  <code>f (g x)</code> <small>is desugared to</small> $\doin{y}{g~x}{f~y}$<br>
+  <code>1 + 2</code> <small>is desugared to</small> $\doin{f}{(+)~1}{f~2}$<br>
+  <code>Op x</code> <small>is desugared to</small> $\opcall{v}{y}{\return y}$
+</h4>
+
+---
+
+### Types
+
+ <h4>$$ 
+  \begin{aligned}
+    A &\bnfis K \bnfor A \to \C \bnfor \C_1 \hto \C_2 \\
+    \C &\bnfis A \E \{ \op_1, \dots, \op_n \}
+  \end{aligned}
+  $$</h4>
+
+- - -
+
+<h3>$$\ctx \ent v \T A$$</h3>
+<h3>$$\ctx \ent c \T \C$$</h3>
+
+---
+
+### Typing rules
+
+<h4>$$
+  \inferrule{
+    \op \T A_1 \opto A_2 \and
+    \ctx \ent v \T A_1 \and
+    \ctx, y \T A_2 \ent c \T A \E \Dirt \and
+    \op \in \Dirt
+  }{
+    \ctx \ent \opcall{v}{y}{c} \T A \E \Dirt
+  }
+$$</h4>
+
+<h4>$$
+  \inferrule{
+    \ctx \ent c_1 \T A_1 \E \Dirt \and
+    \ctx, x \T A_1 \ent c_2 \T A_2 \E \Dirt
+  }{
+    \ctx \ent \seq{x}{c_1} c_2 \T A_2 \E \Dirt
+  }
+$$</h4>
+
+<h4>$$
+  \inferrule{
+    \ctx \ent v \T \C_1 \hto \C_2 \and
+    \ctx \ent c \T \C_1
+  }{
+    \ctx \ent \withhandle{v}{c} \T \C_2
+  }
+$$</h4>
+
+<h4>$$
+    \inferrule{
+    \ctx, x \T A \ent c_r \T B \E \Dirt' \\
+    \Big[
+      (\op_i \T A_i \opto B_i) \in \sig \qquad
+      \ctx, x \T A_i, k \T B_i \to B \E \Dirt' \ent c_i \T B \E \Dirt'
+    \Big]_{1 \leq i \leq n} \\
+    \Dirt \setminus \{ \op_i \}_{1 \leq i \leq n} \subseteq \Dirt'
+  }{
+    \ctx \ent \handler \{
+      \retclause{x} c_r,
+      [\opclause[\op_i]{x}{k} c_i]_{1 \leq i \leq n}
+    \} \T A \E \Dirt \hto B \E \Dirt'
+  }
+
+  $$</h4>
+
+---
+
+### Subtyping
+
+<h4>$$
+  \inferrule{
+  }{
+    K \leq K
+  }
+  \qquad
+  \inferrule{
+    A_2 \leq A_1 \and
+    \C_1 \leq \C_2
+  }{
+    A_1 \to \C_1 \leq A_2 \to \C_2
+  }
+  \qquad
+  \inferrule{
+    \C_2 \leq \C_1 \and
+    \C_1' \leq \C_2'
+  }{
+    \C_1 \hto \C_1' \leq \C_2 \hto \C_2'
+  }
+$$</h4>
+
+<h4>$$
+  \inferrule{
+    A_1 \leq A_2 \and
+    \Dirt_1 \subseteq \Dirt_2
+  }{
+    A_1 \E \Dirt_1 \leq A_2 \E \Dirt_2
+  }
+$$</h4>
+
+- - -
+
+<h4>$$
+  \inferrule{
+    \ctx \ent v \T A_1 \and
+    A_1 \leq A_2
+  }{
+    \ctx \ent v \ent A_2
+  }
+  \qquad
+  \inferrule{
+    \ctx \ent c \T \C_1 \and
+    \C_1 \leq \C_2
+  }{
+    \ctx \ent c \ent \C_2
+  }
+$$</h4>
+
+---
+
+class: center, middle
+
+## every computation
+
+### either
+
+## calls an operation
+
+### or
+
+## returns a value
+
+---
+
+class: center, middle
+
+## every computation of type $A \E \Dirt$
+
+### either
+
+## calls an operation in $\Dirt$
+
+### or
+
+## returns a value of type $A$
+
+---
+
+### Operational semantics
+
+$$
+  \inferrule{
+    c_1 \step c_1'
+  }{
+    \seq{x}{c_1} c_2 \step \seq{x}{c_1'} c_2
+  }
+$$
+
+$$
+  \inferrule{
+  }{
+    \seq{x}{\return v} c \step c[v / x]
+  }
+$$
+
+$$
+  \inferrule{
+  }{
+    \seq{x}{\opcall{v}{y}{c_1}} c_2 \step \opcall{v}{y}{\seq{x}{c_1} c_2}
+  }
+$$
+
+$$
+  \inferrule{
+    c \step c'
+  }{
+    \withhandle{h}{c} \step \withhandle{h}{c'}
+  }
+$$
+
+$$
+  \inferrule{
+  }{
+    \withhandle{h}{(\return v)} \step c_r[v / x]
+  }
+$$
+
+$$
+  \inferrule{
+  }{
+    \withhandle{h}{\opcall[\op_i]{v}{y}{c}} \step c_i[v / x, (\fun{y} \withhandle{h}{c}) / k]
+  }
+$$
+
+$$
+  \inferrule{
+  }{
+    \withhandle{h}{\opcall[\op']{v}{y}{c}} \step \opcall[\op']{v}{y}{\withhandle{h}{c}}
+  }
+$$
+
+---
+
+### Equations &amp; induction principle
+
+$$\begin{aligned}
+  \seq{x}{\return v}{c} &\ \equiv\ c[v / x] \\\\
+  \seq{x}{\opcall{v}{y}{c_1}} c_2 &\ \equiv\ \opcall{v}{y}{\seq{x}{c_1} c_2} \\\\
+  \seq{x}{c} \return x &\ \equiv\ c \\\\
+  \seq{x_2}{(\seq{x_1}{c_1} c_2)} c_3 &\ \equiv\ \seq{x_1}{c_1} (\seq{x_2}{c_2} c_3) \\\\
+  \conditional{\tru}{c_1}{c_2} &\ \equiv\ c_1 \\\\
+  \conditional{\fls}{c_1}{c_2} &\ \equiv\ c_2 \\\\
+  \conditional{v}{c[\tru / x]}{c[\fls / x]} &\ \equiv\ c[v / x] \\\\
+  (\fun{x} c) \, v &\ \equiv\ c[v / x] \\\\
+  \fun{x} v \, x &\ \equiv\ v \\\\
+  \withhandle{h}{(\return v)} &\ \equiv\ c_r[v / x] \\\\
+  \withhandle{h}{(\opcall[\op_i]{v}{y}{c})} &\ \equiv\ c_i[v / x, (\fun{y} \withhandle{h}{c}) / k] \\\\
+  \withhandle{h}{(\opcall[\op']{v}{y}{c})} &\ \equiv\ \opcall[\op']{v}{y}{\withhandle{h}{c}} \\\\
+  \withhandle{(\handler \{ \retclause{x} c_2 \})} c_1 &\ \equiv\ \seq{x}{c_1} c_2  \\\\
+\end{aligned}$$
+
+$$
+\inferrule{
+  \forall v. \phi(\return v)
+  \and
+  \forall \op, v, c. (\forall y. \phi(c(y)) \Rightarrow \phi(\opcall{v}{y}{c}))
+}{
+  \forall c. \phi(c)
+}
+$$
+
+
+---
+
+class: center, middle
+
+# Explicit effects<br>subtyping
+
+### IFIP WG 2.1, Lesbos
+
+---
+
+class: center, middle
+
+# Effect inference in Eff<br>is currently broken
+
+---
+
+background-image: url(occurs-check-issue.png)
+background-size: auto 100%
+
+---
+
+background-image: url(equals-issue.png)
+background-size: auto 100%
+
+---
+
+class: center, middle
+
+# ICFP 2017 paper #113
+
+---
+
+class: center, middle
+
+### idea:
+
+## handler specific optimizations
+
+### +
+
+## free monad embedding in OCaml
+
+### =
+
+## fast handlers
+
+---
+
+**source code**
+```ocaml
+let no_attack (x, y) (x', y') =
+  x <> x' && y <> y' && abs (x - x') <> abs (y - y')
+```
+
+--
+
+**generated code**
+.mini[```ml
+let _no_attack_20 (_x_21,_y_22) =
+  value
+    (fun (_x'_23,_y'_24)  ->
+       ((_var_1 _x_21) >> (fun _gen_bind_26  -> _gen_bind_26 _x'_23)) >>
+         (fun _gen_bind_25  ->
+            match _gen_bind_25 with
+            | true  ->
+                ((_var_1 _y_22) >> (fun _gen_bind_28  -> _gen_bind_28 _y'_24))
+                  >>
+                  ((fun _gen_bind_27  ->
+                      match _gen_bind_27 with
+                      | true  ->
+                          ((((_var_4 _x_21) >>
+                               (fun _gen_bind_32  -> _gen_bind_32 _x'_23))
+                              >> (fun _gen_bind_31  -> _abs_9 _gen_bind_31))
+                             >> (fun _gen_bind_30  -> _var_1 _gen_bind_30))
+                            >>
+                            ((fun _gen_bind_29  ->
+                                (((_var_4 _y_22) >>
+                                    (fun _gen_bind_35  -> _gen_bind_35 _y'_24))
+                                   >>
+                                   (fun _gen_bind_34  -> _abs_9 _gen_bind_34))
+                                  >>
+                                  (fun _gen_bind_33  ->
+                                     _gen_bind_29 _gen_bind_33)))
+                      | false  -> value false))
+            | false  -> value false))
+```]
+
+---
+
+**source code**
+```ocaml
+let no_attack (x, y) (x', y') =
+  x <> x' && y <> y' && abs (x - x') <> abs (y - y')
+```
+
+**generated code with pureness analysis**
+```ml
+let _no_attack_20 (_x_21,_y_22) (_x'_23,_y'_24) =
+  if _x_21 <> _x'_23
+  then
+    (if _y_22 <> _y'_24
+     then (_abs_9 (_x_21 - _x'_23)) <> (_abs_9 (_y_22 - _y'_24))
+     else false)
+  else false 
+```
+
+---
+
+### Benchmark 1: simple loop
+
+.center[![](relative-improvment.png)]
+
+---
+
+### Benchmark 2: $n$-queens
+
+.center[![](one-queen.png)]
+#### .frb[<br>one solution]
+.center[![](all-queens.png)]
+#### .frb[<br>all solutions]
+
+---
+
+### Benchmark 3: there is no benchmark 3
+
+> The experimental **evaluation of the optimization is very thin** and significantly below the kind of evaluation that one expects of an optimization paper at a venue like ICFP.
+
+>>> reviewer #113A
+
+> Only my concern is that **the benchmark set is rather small**. It remains to be seen if this improvement scales to larger programs.
+
+>>> reviewer #113B
+
+> Your compiler doesn't seem to support implementing high-level effects with OCaml's native effects, like references and console input/output.  At least, **there are no examples in the paper**.
+
+>>> reviewer #113C
+
+> The evaluation of the work is only done using **two very small benchmarks**: a looping counter and nqueens.
+
+>>> reviewer #113D
+
+--
+
+### .fr[.center[verdict: .red[**REJECT**]]]
+
+
+---
+
+class: center, middle
+
+# why?
+
+---
+
+### Subterm inference is hard
+
+<h2>
+$$\inferrule{
+  {\inferrule{
+      \dots
+    }{
+      \mathop{id} : (\alpha \leq \beta) \Rightarrow (\alpha \to \beta)
+    }}
+  \quad
+  {1 \T \intTy}
+}{
+  \mathop{id} \, 1 \T (\alpha \leq \beta \land \intTy \leq \alpha) \Rightarrow \beta
+}$$
+</h2>
+
+---
+
+### Subterm inference is hard
+
+<h2>
+$$\inferrule{
+  {\inferrule{
+      \dots
+    }{
+      \mathop{id} : (\alpha \leq \beta) \Rightarrow (\alpha \to \beta)
+    }}
+  \quad
+  {1 \T \intTy}
+}{
+  \mathop{id} \, 1 \T (\intTy \leq \beta) \Rightarrow \beta
+}$$
+</h2>
+
+---
+
+### Subterm inference is hard
+
+<h2>
+$$\inferrule{
+  {\inferrule{
+      \dots
+    }{
+      \mathop{id} : (\alpha \leq \beta) \Rightarrow (\alpha \to \beta)
+    }}
+  \quad
+  {1 \T \intTy}
+}{
+  \mathop{id} \, 1 \T \intTy
+}$$
+</h2>
+
+--
+
+#### To enable optimizations, changes need to be propagated into subterms.
+
+---
+
+### Subterm inference is hard
+
+<h2>
+$$\inferrule{
+  {\inferrule{
+      \dots
+    }{
+      \mathop{id} : \intTy \to \intTy
+    }}
+  \quad
+  {1 \T \intTy}
+}{
+  \mathop{id} \, 1 \T \intTy
+}$$
+</h2>
+
+#### To enable optimizations, changes need to be propagated into subterms.
+
+--
+
+#### Subtyping makes this hard. Polymorphism and effects don't make it any easier.
+
+--
+
+### .center[consequence: .red[**REJECT**]]
+
+---
+
+class: center, middle
+
+### solution:
+
+## new core calculus
+
+### with
+
+## explicit subtyping
+
+### &amp;
+
+## polymorphism
+
+---
+
+class: center
+
+### Eff
+
+--
+
+##### desugaring
+
+### implicitly typed language
+
+--
+
+##### inference
+
+### explicitly typed language
+
+--
+
+##### erasure
+
+### language without effects or subtyping
+
+--
+
+##### compilation
+
+### Multicore OCaml
+
+---
+
+### All subtyping is made explicit
+
+**Implicitly typed language**
+
+$$
+    \inferrule{
+        \inferrule{
+            \inferrule{
+                (\Op : \unitTy \to A_1) \in \Sigma
+                \and
+                \tmUnit : \unitTy
+            }{
+                \Op~\tmUnit : A_1 ! \set{\Op}
+            }
+            \and
+            A_1 ! \set{\Op} \le A_1 ! \set{\Op, \Op'}
+        }{
+            \Op~\tmUnit : A_1 ! \set{\Op, \Op'}
+        }
+        \and
+        \cdots
+    }{
+        (\doin{x}{\Op~\tmUnit}{f~x}) \T A_2 ! \set{\Op, \Op'}
+    }
+$$
+
+--
+
+**Explicitly typed language**
+
+$$\inferrule{
+        \inferrule{
+            \inferrule{
+                (\Op : \unitTy \to A_1) \in \Sigma
+                \and
+                \tmUnit : \unitTy
+            }{
+                \Op~\tmUnit : A_1 ! \set{\Op}
+            }
+            \and
+            \inferrule{
+                \color{#f00}{\vdots}
+            }{
+                \color{#f00}{\coercion_1}: A_1 ! \set{\Op} \le A_1 ! \set{\Op, \Op'}
+            }
+        }{
+            \cast{(\Op~\tmUnit)}{\color{#f00}{\coercion_1}} : A_1 ! \set{\Op, \Op'}
+        }
+        \and
+        \cdots
+    }{
+        (\doin{x}{\cast{(\Op~\tmUnit)}{\color{#f00}{\coercion_1}}}{\cast{(f~x)}{\color{#f00}{\coercion_2}}}) \T A_2 ! \set{\Op, \Op'}
+    }
+$$
+
+$\coercion_1$ and $\coercion_2$ are proofs for the appropriate subtyping relation.
+
+---
+
+### Polymorphism is also explicit
+
+**Implicitly typed language**
+
+$$
+    \mathtt{appUnit} \stackrel{def}{=} \fun{f} f~\tmUnit
+$$
+
+$$
+    \mathtt{appUnit} : \forall \alpha, \alpha', \delta, \delta'.
+  \alpha \le \alpha' \Rightarrow \delta \le \delta' \Rightarrow
+  (\unitTy \to (\alpha \E \delta)) \to \alpha' \E \delta'
+$$
+
+**Explicitly typed language**
+
+<div style="margin-left: -30pt">$$
+    \mathtt{appUnit}' = \Lambda \alpha, \alpha', \delta, \delta', (\omega:\alpha \le \alpha'), (\omega':\delta \le \delta').
+\fun{(g:\unitTy \to \alpha \,!\, \delta)}{\cast{(g\,\tmUnit)}{(\omega\,!\,\omega')}}
+$$</div>
+
+---
+
+### Inference algorithm
+### $$ \ctx \ent v : A \mid \cnstrs \leadsto v' \qquad\qquad \ctx \ent c : \C \mid \cnstrs \leadsto c' $$
+
+- - -
+
+<h4>$$\inferrule{
+  v_1 : A_1 \mid \cnstrs_1 \leadsto v'_1 \and
+  v_2 : A_2 \mid \cnstrs_2 \leadsto v'_2
+}{
+  v_1~v_2 \quad:\quad \alpha \E \delta \mid \cnstrs_1, \cnstrs_2, \omega : A_1 \leq \alpha \E \delta \quad\leadsto\quad(\cast{v'_1}{\omega})~v'_2\
+}$$</h4>
+
+- - -
+
+#### Inference is sound &amp; complete.
+
+---
+
+### Subtyping and effect erasure
+
+This should work:$\newcommand{\ers}{\varepsilon}$
+
+<h4>$$\begin{aligned}
+  \ers(K) &= K                                     & \ers(\forall \alpha. A) &= \forall \alpha. \ers(A) \\
+  \ers(A \to \C) &= \ers(A) \to \ers(\C)           & \ers(\forall \delta. A) &= \ers(A) \\
+  \ers(\C \hto \D) &= \ers(\C) \hto \ers(\D)       & \ers(\pi \Rightarrow A) &= \ers(A) \\
+  \ers(A \E \Dirt) &= \ers(A) \\
+\end{aligned}$$</h4>
+
+.center[and similar for terms]
+
+--
+
+- - -
+
+<h4>$$\mathtt{appUnit} : 
+  \forall \alpha, \alpha', \delta, \delta'.
+  \alpha \le \alpha' \Rightarrow \delta \le \delta' \Rightarrow
+  (\unitTy \to (\alpha \E \delta) \to \alpha' \E \delta'$$</h4>
+
+--
+
+<h4>$$\ers\big(
+  \forall \alpha, \alpha', \delta, \delta'.
+  \alpha \le \alpha' \Rightarrow \delta \le \delta' \Rightarrow
+  (\unitTy \to (\alpha \E \delta)) \to \alpha' \E \delta'\big)$$</h4>
+<h4>$${} =
+  \big(\forall \alpha, \alpha'. (\unitTy \to \alpha) \to \alpha'\big)
+\neq \big(\forall \alpha. (\unitTy \to \alpha) \to \alpha\big)$$</h4>
+
+--
+
+### .fr[.center[We need to unify! But when?]]
+
+---
+
+### Type skeletons
+
+This does work:$\newcommand{\ers}{\varepsilon}$
+
+<h4>$$\begin{aligned}
+  \ers(K) &= K                                     & \ers(\forall \color{red}{(\alpha : \tau)}. A) &= \color{red}{\ers(A)} \\
+  \ers(A \to \C) &= \ers(A) \to \ers(\C)           & \ers(\forall \delta. A) &= \ers(A) \\
+  \ers(\C \hto \D) &= \ers(\C) \hto \ers(\D)       & \ers(\pi \Rightarrow A) &= \ers(A) \\
+  \ers(A \E \Dirt) &= \ers(A)                      & \color{red}{\ers(\forall \tau. A)} &= \color{red}{\forall \tau. \ers(A)}
+\end{aligned}$$</h4>
+
+.center[and similar for terms]
+
+- - -
+
+<h4>$$\ers\big(
+  \forall \tau, (\alpha : \tau), (\alpha' : \tau), \delta, \delta'.
+  \alpha \le \alpha' \Rightarrow \delta \le \delta' \Rightarrow
+  (\unitTy \to (\alpha \E \delta')) \to \alpha' \E \delta'\big)$$</h4>
+<h4>$${} =
+  \forall \tau. (\unitTy \to \tau) \to \tau$$</h4>
+
+- - -
+
+#### Erasure commutes with the typing and operational semantics.
+
+---
+
+## Did not talk about
+
+* implementation of the inference algorithm
+* mechanisation of meta-theory in Abella
+* garbage collection of types
+
+## Future work
+
+* optimizations on the explicitly typed language
+* erasure to a language without handlers
+
+</textarea>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [ ['$','$'], ["\\(","\\)"] ], displayMath: [ ['$$','$$'], ["\\[","\\]"] ], processEscapes: true},
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+$(document).ready(function() {
+
+    $("span.spoiler").hide();
+
+    $('<a class="reveal">???</a>').insertBefore('.spoiler');
+
+    $("a.reveal").click(function() {
+        $(this).parent().children("span.spoiler").fadeIn(100);
+        $(this).parent().children("a.reveal").hide();
+    });
+
+});
+var slideshow = remark.create({
+    highlightLines: true,
+    slideNumberFormat: '',
+});
+</script>
+</body>
+
+</html>
