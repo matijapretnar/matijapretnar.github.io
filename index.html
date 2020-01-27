@@ -12,6 +12,12 @@
 
     <link rel="shortcut icon" href="img/favicon.ico">
     <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+
+    <style>
+        #talk p {
+            font-size: smaller;
+        }
+    </style>
 </head>
 
 <body class="wrapper">
@@ -79,61 +85,136 @@
         <div class="grid-12">
 
             <h2 id="talks">Talks</h2>
+            <div class="talk">
+                <h3>Kvantno računalništvo</h3>
+                <h4>Gimnazija Bežigrad, 23. januar 2020, Ljubljana</h4>
+                <ul>
+                    <li><a href="talks/2020-01-bezigrad.pdf">PDF</a></li>
+                    <li><a href="talks/2020-01-bezigrad.key">Keynote</a></li>
+                </ul>
+            </div>
 
-            <h3>Kvantno računalništvo
-                <small>Gimnazija Bežigrad, 23. januar 2020, Ljubljana</small>
-            </h3>
-            <ul>
-                <li><a href="talks/2020-01-bezigrad.pdf">PDF</a></li>
-                <li><a href="talks/2020-01-bezigrad.key">Keynote</a></li>
-            </ul>
+            <div class="talk">
+                <h3>Asynchronous operations</h3>
+                <h4>IFIP WG2.1 meeting #79, 8 January 2020, Otterlo</h4>
+                <p>
+                    In the standard algebraic approach to effects, once an operation is called, the evaluation of the continuation stalls until it gets a result (either from a built-in primitive effect or through a handler). But we often desire asynchronous behaviour, when the continuation may proceed with the evaluation and suitably incorporates the result once it arrives. I will describe a small calculus with primitives for sending and receiving such signals.
+                </p>
+                <p>
+                    Joint work with Danel Ahman
+                </p>
+                <ul>
+                    <li><a href="talks/2020-01-otterlo.pdf">PDF</a></li>
+                    <li><a href="talks/2020-01-otterlo.key">Keynote</a></li>
+                </ul>
+            </div>
 
-            <h3>Asynchronous operations
-                <small>IFIP WG2.1 meeting #79, 8 January 2020, Otterlo</small>
-            </h3>
-            <ul>
-                <li><a href="talks/2020-01-otterlo.pdf">PDF</a></li>
-                <li><a href="talks/2020-01-otterlo.key">Keynote</a></li>
-            </ul>
+            <div class="talk">
+                <h3>Putting reason back into handlers</h3>
+                <h4>IFIP WG2.1 meeting #77, 3 July 2018, Brandenburg</h4>
+                <p>
+                    The main premise of algebraic effects is that effects can be described with an equational theory consisting of a set of operations and equations between them. However, many computationally interesting algebraic effect handlers do not respect these equations, which most approaches nowadays reconcile by assuming a trivial equational theory. I will present an approach in which the expected equations may be encoded in computation types.
+                </p>
+                <p>
+                    Joint work with Žiga Lukšič
+                </p>
+                <ul>
+                    <li><a href="talks/2018-07-brandenburg.pdf">PDF</a></li>
+                    <li><a href="talks/2018-07-brandenburg.key">Keynote</a></li>
+                </ul>
+            </div>            
 
-            <h3>Putting reason back into handlers
-                <small>IFIP WG2.1 meeting #77, 3 July 2018, Brandenburg</small>
-            </h3>
-            <ul>
-                <li><a href="talks/2018-07-brandenburg.pdf">PDF</a></li>
-                <li><a href="talks/2018-07-brandenburg.key">Keynote</a></li>
-            </ul>
+            <div class="talk">
+                <h3>Bringing equations back to algebraic effect handlers</h3>
+                <h4>LFCS seminar, 2 July 2019, Edinburgh</h4>
+                <p>
+                    Algebraic effects are computational effects that can be described with a set of basic operations and equations between them. As many interesting effect handlers do not respect these equations, most approaches assume a trivial theory, sacrificing both reasoning power and safety. I will present an alternative approach where the effect system tracks equations that are observed in subparts of the program, yielding a sound and flexible logic, and paving a way for practical optimizations and reasoning tools.
+                </p>
+                <p>
+                    Joint work with Žiga Lukšič
+                </p>
+                <ul class="talk-files">
+                    <li><a href="talks/2019-07-edinburgh.pdf">PDF</a></li>
+                    <li><a href="talks/2019-07-edinburgh.key">Keynote</a></li>
+                </ul>
+            </div>
 
-            <h3>Bringing equations back to algebraic effect handlers
-                <small>LFCS seminar, 2 July 2019, Brandenburg</small>
-            </h3>
-            <ul>
-                <li><a href="talks/2019-07-edinburgh.pdf">PDF</a></li>
-                <li><a href="talks/2019-07-edinburgh.key">Keynote</a></li>
-            </ul>
+            <div class="talk">
+                <h3>Local algebraic effect theories</h3>
+                <h4>Meet The Jury!, 23 January 2019, Leuven</h4>
+                <p>
+                    Algebraic effects are computational effects that can be described with a set of basic operations and equations between them. As many interesting effect handlers do not respect these equations, most approaches assume a trivial theory, sacrificing both reasoning power and safety.
+                </p>
+                <p>
+                    We present an alternative approach where the type system tracks equations thar are observed in subparts of the program, yielding a sound and flexible logic, and paving a way for practical optimizations and reasoning tools.
+                </p>
+                <p>
+                    Joint work with Žiga Lukšič
+                </p>
+                <ul>
+                    <li><a href="talks/2019-01-leuven.pdf">PDF</a></li>
+                    <li><a href="talks/2019-01-leuven.key">Keynote</a></li>
+                </ul>
+            </div>
 
-            <h3>Local algebraic effect theories
-                <small>Meet The Jury!, 23 January 2019, Leuven</small>
-            </h3>
-            <ul>
-                <li><a href="talks/2019-01-leuven.pdf">PDF</a></li>
-                <li><a href="talks/2019-01-leuven.key">Keynote</a></li>
-            </ul>
+            <div class="talk">
+                <h3>Explicit effects subtyping</h3>
+                <h4>IFIP WG2.1 meeting #76, 18 October 2017, Lesbos</h4>
+                <p>
+                    To inform the programmer about the effects of a given program, a bottom up inference algorithm that Eff provides is sufficient. However, for an optimizing compiler, we need access to effects of all subterms. It turned out that adapting the current algorithm is overly error-prone as the core language is implicitly typed and subtyping-based.
+                </p>
+                <p>
+                    In hope of remedying the situation, we present an explicitly-typed polymorphic core calculus, which reifies appeals to subtyping in explicit casts with coercions that witness the subtyping proof. We provide a constraint-based inference algorithm that turns an implicitly-typed term into our calculus, and effect erasure, which allows us to targets an ML-like language with or without support for algebraic effects.
+                </p>
+                <p>
+                    The talk will include a brief introduction to algebraic effect handlers.
+                </p>
+                <p>
+                    Joint work with Amr Hany Saleh, George Karachalias and Tom Schrijvers
+                </p>
+                <ul>
+                    <li><a href="talks/2017-10-lesbos/index.html">HTML</a></li>
+                </ul>
+            </div>
 
-            <h3>Explicit effects subtyping
-                <small>IFIP WG2.1 meeting #76, 18 October 2017, Lesbos</small>
-            </h3>
-            <ul>
-                <li><a href="talks/2017-10-lesbos/index.html">HTML</a></li>
-            </ul>
+            <div class="talk">
+                <h3>Hekerski pristop k statistiki</h3>
+                <h4>FMF seminar za učitelje matematike, 1. oktober 2016, Ljubljana</h4>
+                <p>
+                    Recimo, da so učenci 3. b razreda pri testu iz matematike dosegli povprečno 63%, učenci 3. c razreda pa 70%. Ali so učenci 3. c res bolj razumeli snov ali pa je razlika le posledica zunanjih dejavnikov in bi bil kakšen drug dan rezultat ravno obraten? Kaj pa, če se enaka razlika pojavi še pri naslednjem testu? S kakšno gotovostjo lahko rečemo, da ni šlo za naključje? Statistika nam na taka vprašanja zna odgovoriti, vendar so odgovori dostikrat precej zapleteni. Na seminarju si bomo zato ogledali alternativen pristop, pri katerem iskano gotovost ocenimo s pomočjo računalniških simulacij.
+                </p>
+                <ul>
+                    <li><a href="talks/2016-10-ljubljana.pdf">PDF</a></li>
+                    <li><a href="talks/2016-10-ljubljana.key">Keynote</a></li>
+                </ul>
+            </div>
 
-            <h3>An Introduction to Algebraic Effects and Handlers
-                <small>MFPS XXXI, 22 June 2015, Nijmegen</small>
-            </h3>
-            <ul>
-                <li><a href="talks/2015-06-nijmegen.pdf">PDF</a></li>
-                <li><a href="talks/2015-06-nijmegen.key">Keynote</a></li>
-            </ul>
+            <div class="talk">
+                <h3>A low overhead automated service for teaching programming</h3>
+                <h4>Koli Calling 2015, 20 November 2015, Koli</h4>
+                <p>
+                    Programming is a skill that often demands that students engage in a significantly high amount of individual practice and experimentation in order to acquire basic competence. Teachers are required to both encourage students by exposing them to numerous problems and supervise the students' attempts to solve them.
+                </p>
+                <p>
+                    To support this teaching approach we developed a web service called Projekt Tomo, presented in the article. The service is designed in such a way that it requires little or no additional work from students and teachers, enabling them to focus on the content. Furthermore, the service can be used in almost all teaching environments, as it can be adapted to most programming languages and has minor technical requirements.                    
+                </p>
+                <p>
+                    Joint work with Matija Lokar
+                </p>
+                <ul>
+                    <li><a href="talks/2015-11-koli.pdf">PDF</a></li>
+                    <li><a href="talks/2015-11-koli.key">Keynote</a></li>
+                </ul>
+            </div>
+
+            <div class="talk">
+                <h3>An Introduction to Algebraic Effects and Handlers</h3>
+                <h4>MFPS XXXI, 22 June 2015, Nijmegen</h4>
+                <ul>
+                    <li><a href="talks/2015-06-nijmegen.pdf">PDF</a></li>
+                    <li><a href="talks/2015-06-nijmegen.key">Keynote</a></li>
+                </ul>
+            </div>
 
         </div><!-- /grid-12 -->
     </div><!-- /grids -->
