@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
 
@@ -16,7 +17,7 @@
 <body class="wrapper">
 
     <div class="header">
-        <a href="img/matija.jpg"><img src="img/matija.png" width="320" style="float: right; margin-bottom: -50px; margin-left: 10px" alt="Matija Pretnar"/></a>
+        <a href="img/matija.jpg"><img src="img/matija.png" width="320" style="float: right; margin-bottom: -50px; margin-left: 10px" alt="Matija Pretnar" /></a>
         <h1>Matija Pretnar</h1>
 
         <address>
@@ -41,11 +42,11 @@
 
             <p>
                 I study formalization, implementation, and semantics of programming languages.
-                My current research is focused on algebraic effects and their handlers.
+                My current research is focused on <a href="https://github.com/yallop/effects-bibliography">algebraic effects and their handlers</a>.
             </p>
 
             <ul>
-                <li><a href="http://dblp.uni-trier.de/pers/ht/p/Pretnar:Matija">DBLP</a> bibliography</li>
+                <li><a href="http://dblp.uni-trier.de/pers/hy/p/Pretnar:Matija">DBLP</a> bibliography</li>
                 <li><a href="http://splet02.izum.si/cobiss/bibliography?code=32320&langbib=eng&wos=on">COBISS</a> bibliography</li>
                 <li><a href="http://www.eff-lang.org/">Eff</a>: programming with algebraic effects and handlers</li>
             </ul>
@@ -64,8 +65,8 @@
             <ul>
                 <li>zapiski s predavanj pri <a href="http://matija.pretnar.info/uvod-v-programiranje/">Uvodu v programiranje</a></li>
                 <li><a href="http://www.projekt-tomo.si/">Projekt Tomo</a>: spletna aplikacija za učenje programiranja</li>
-                <li><span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>ovski paket za <a href="#izpit">sestavljanje izpitnih pol</a></li>
-                <li>program v <em>Mathematici</em> za <a href="#generiranje-nalog">generiranje nalog</a> v večjih količinah</li>
+                <li><span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>ovski paket za <a href="https://github.com/ul-fmf/izpit">sestavljanje izpitnih pol</a></li>
+                <li>program v <em>Mathematici</em> za <a href="https://github.com/matijapretnar/generiranje-nalog">generiranje nalog</a> v večjih količinah</li>
             </ul>
 
         </div><!-- /grid-6 -->
@@ -77,61 +78,38 @@
     <div class="grids">
         <div class="grid-12">
 
-            <h2 id="izpit">Sestavljanje izpitnih pol</h2>
+            <h2 id="talks">Talks</h2>
 
-            <p>
-                Da bi olajšal sestavljanje izpitnih pol, sem pripravil LaTeXovski paket, ki veliko večino dela postori sam.
-                Vse, kar morate podati, so podatki o izpitu (ime, datum, navodila in učilnico) ter naloge.
-            </p>
+            <h3>Asynchronous operations
+                <small>IFIP WG2.1 meeting #79, 8 January 2020, Otterlo</small>
+            </h3>
+            <ul>
+                <li><a href="talks/2020-01-otterlo.pdf">PDF</a></li>
+                <li><a href="talks/2020-01-otterlo.key">Keynote</a></li>
+            </ul>
 
-            <p>
-                Paket nato avtomatsko oblikuje glavo izpita, sedežni red, polja za ime, vpisno številko in točke ter podobno.
-                Poleg tega vam omogoča, da za vsak izpit pripravite tako verzijo za reševanje na polo kot verzijo za objavo v arhivu.
-            </p>
+            <h3>Putting reason back into handlers
+                <small>IFIP WG2.1 meeting #77, 3 July 2018, Brandenburg</small>
+            </h3>
+            <ul>
+                <li><a href="talks/2018-07-brandenburg.pdf">PDF</a></li>
+                <li><a href="talks/2018-07-brandenburg.key">Keynote</a></li>
+            </ul>
 
-            <dl>
-                <dt><a href="latex/vzorec.pdf">vzorec.pdf</a></dt>
-                <dd>PDF z vzorčnim izpitom</dd>
-                <dt><a href="latex/vzorec-arhiv.pdf">vzorec-arhiv.pdf</a></dt>
-                <dd>PDF z istim izpitom, le pripravljenim za objavo v arhivu</dd>
-                <dt><a href="latex/izpit.zip">izpit.zip</a></dt>
-                <dd>Datoteka s paketom ter vzorčnim izpitom</dd>
-            </dl>
+            <h3>Explicit effects subtyping
+                <small>IFIP WG2.1 meeting #76, 18 October 2017, Lesbos</small>
+            </h3>
+            <ul>
+                <li><a href="talks/2017-10-lesbos/index.html">HTML</a> (remark.js)</li>
+            </ul>
 
-            <p>
-                Za najnovejšo in vse starejše različice paketa poglejte na <a href="https://github.com/matijapretnar/izpit">GitHub</a>.
-            </p>
-
-        </div><!-- /grid-12 -->
-    </div><!-- /grids -->
-
-    <hr>
-
-    <div class="grids">
-        <div class="grid-12">
-
-            <h2 id="generiranje-nalog">Generiranje nalog</h2>
-
-            <p>
-                Spodnji program za dani seznam študentov omogoča generiranje naključnih nalog ter njihovih rešitev. Program sprejme:
-            </p>
-            <ol>
-              <li>seznam nalog (vsaka je opisana s programom v <em>Mathematici</em>),</li>
-              <li>vzorčno datoteko (ponavadi v LaTeXu) in</li>
-              <li>seznam študentov,</li>
-            </ol>
-            <p>
-                nato pa ustvari posamezne datoteke z nalogami in skupno datoteko z rešitvami. Naloge niso čisto naključne, saj vam program za istega študenta vedno vrne enako nalogo. To vam omogoča, da naloge naknadno popravljate, ne da bi se vam pri tem v celoti spremenile.
-            </p>
-
-            <dl>
-                <dt><a href="mathematica/generiranje-nalog.zip">generiranje-nalog.zip</a></dt>
-                <dd>Datoteka s programom ter vzorcem</dd>
-            </dl>
-
-            <p>
-                Za najnovejšo in vse starejše različice programa poglejte na <a href="https://github.com/matijapretnar/generiranje-nalog">GitHub</a>.
-            </p>
+            <h3>An Introduction to Algebraic Effects and Handlers
+                <small>MFPS XXXI, 22 June 2015, Nijmegen</small>
+            </h3>
+            <ul>
+                <li><a href="talks/2015-06-nijmegen.pdf">PDF</a></li>
+                <li><a href="talks/2015-06-nijmegen.key">Keynote</a></li>
+            </ul>
 
         </div><!-- /grid-12 -->
     </div><!-- /grids -->
@@ -144,4 +122,5 @@
     </div>
 
 </body>
+
 </html>
